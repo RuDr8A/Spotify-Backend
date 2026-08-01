@@ -44,6 +44,22 @@ async function createAlbum(req, res) {
             return res.status(400).json({ message: "Album title is required" });
         }
 
+        if(musicIds && musicIds.length > 0){
+            const songs = await musicModel.find({_id : {$in : musicIds}})
+
+            if(songs.length !== musicIds.length){
+                return res.status(400).json({ message: "One or more songs do not exist in the database" });
+            }
+
+            const allSongsBelongToArtist = songs.every(
+                (song) => song.artist.toString() === req.user._id.toString()
+            )
+
+            if (!allSongsBelongToArtist) {
+                return res.status(403).json({ message: "Forbidden: You can only add your own songs to an album." });
+            }
+        }
+
         const album = await albumModel.create({
             title,
             artist: req.user._id, 
