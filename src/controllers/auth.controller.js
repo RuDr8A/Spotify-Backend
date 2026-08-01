@@ -67,4 +67,15 @@ async function userLogin(req, res){
 
 }
 
-module.exports = {registerUser, userLogin} ;
+async function userLogout(req, res){
+    try {
+        // httpOnly matches the security we set during login
+        res.clearCookie("token", { httpOnly: true }); 
+        res.status(200).json({ message: "User logged out successfully" });
+    } catch (error) {
+        console.error("Logout Error:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+module.exports = {registerUser, userLogin, userLogout} ;
