@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 
-const albumSchema = new mongoose({
+const albumSchema = new mongoose.Schema({
     title : {
         type : String,
         required : true
@@ -12,7 +12,7 @@ const albumSchema = new mongoose({
     artist : {
         type : mongoose.Schema.Types.ObjectId,
         required : true,
-        ref = 'User'
+        ref : 'User'
 
     }
 }) 
